@@ -1,3 +1,5 @@
+from mock import *
+
 class CarController:
     def get_ready_to_go(self, engine, gearbox, electronics, status_panel):
         return True
