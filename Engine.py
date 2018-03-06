@@ -1,2 +1,4 @@
 class Engine:
-    pass
+
+    def accelerate(self):
+        pass
