@@ -37,6 +37,24 @@ class ControllerUT(unittest.TestCase):
         self.ctrl.go_forward(electronics, panel)
         electronics.accelerate.assert_called_once()
 
+    def test_interface_go_forward_002(self):
+        """
+        GIVEN :engine, status_panel,CarController
+        GIVEN :CarController call go_forward interface
+        WHEN  :electronics.engine_is_running() return flase
+        WHEN  :status_panel.there_is_enough_fuel() return True
+        THEN  :electronics.accelerate will not be call
+        """
+        panel = StatusPanel()
+        electronics = Electronics()
+
+        electronics.accelerate = mock.Mock(return_value=None)
+        panel.there_is_enough_fuel = mock.Mock(return_value=True)
+        electronics.engine_is_running = mock.Mock(return_value=False)
+
+        self.ctrl.go_forward(electronics, panel)
+        electronics.accelerate.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()
