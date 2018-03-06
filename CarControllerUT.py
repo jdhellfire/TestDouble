@@ -28,7 +28,7 @@ class ControllerUT(unittest.TestCase):
         GIVEN :CarController call go_forward interface
         WHEN  :electronics.engine_is_running() return True
         WHEN  :status_panel.there_is_enough_fuel() return True
-        THEN  :electronics.accelerate will be call
+        THEN  :electronics.accelerate will be call otherwise electronics.accelerate will not be call
         """
         self.electronics.accelerate = mock.Mock(return_value=None)
 
