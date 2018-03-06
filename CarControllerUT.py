@@ -39,6 +39,10 @@ class ControllerUT(unittest.TestCase):
         self.ctrl.go_forward(self.electronics, self.panel)
         self.assertEqual(Data['CALLED_CNT'], self.electronics.accelerate.call_count)
 
+    def test_interface_stop(self):
+        pass
+
+
 
 if __name__ == '__main__':
     unittest.main()
