@@ -35,7 +35,7 @@ class ControllerUT(unittest.TestCase):
         electronics.engine_is_running = mock.Mock(return_value=True)
 
         self.ctrl.go_forward(electronics, panel)
-        electronics.accelerate.assert_called_once()
+        self.assertEqual(1,electronics.accelerate.call_count)
 
     def test_interface_go_forward_002(self):
         """
@@ -53,7 +53,7 @@ class ControllerUT(unittest.TestCase):
         electronics.engine_is_running = mock.Mock(return_value=False)
 
         self.ctrl.go_forward(electronics, panel)
-        electronics.accelerate.assert_not_called()
+        self.assertEqual(0, electronics.accelerate.call_count)
 
 
 if __name__ == '__main__':
