@@ -11,6 +11,8 @@ from StatusPanel import StatusPanel
 class ControllerUT(unittest.TestCase):
     def setUp(self):
         self.ctrl = CarController()
+        self.panel = StatusPanel()
+        self.electronics = Electronics()
 
     def test_interface_get_ready_to_go(self):
         """
@@ -28,16 +30,15 @@ class ControllerUT(unittest.TestCase):
         WHEN  :status_panel.there_is_enough_fuel() return True
         THEN  :electronics.accelerate will be call
         """
-        panel = StatusPanel()
-        electronics = Electronics()
-        electronics.accelerate = mock.Mock(return_value=None)
+        self.electronics.accelerate = mock.Mock(return_value=None)
 
         for Data in TestData['GO_FORWARD']:
-            panel.there_is_enough_fuel = mock.Mock(return_value=Data['FUEL_IS_ENOUGH'])
-            electronics.engine_is_running = mock.Mock(return_value=Data['ENGINE_IS_RUNNING'])
+            self.panel.there_is_enough_fuel = mock.Mock(return_value=Data['FUEL_IS_ENOUGH'])
+            self.electronics.engine_is_running = mock.Mock(return_value=Data['ENGINE_IS_RUNNING'])
 
-        self.ctrl.go_forward(electronics, panel)
-        self.assertEqual(Data['CALLED_CNT'],electronics.accelerate.call_count)
+        self.ctrl.go_forward(self.electronics, self.panel)
+        self.assertEqual(Data['CALLED_CNT'], self.electronics.accelerate.call_count)
+
 
 if __name__ == '__main__':
     unittest.main()
