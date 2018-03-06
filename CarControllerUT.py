@@ -29,8 +29,12 @@ class ControllerUT(unittest.TestCase):
         """
         panel = StatusPanel()
         electronics = Electronics()
+
         electronics.accelerate = mock.Mock(return_value=None)
-        self.ctrl.go_forward( electronics,panel)
+        panel.there_is_enough_fuel = mock.Mock(return_value=True)
+        electronics.engine_is_running = mock.Mock(return_value=True)
+
+        self.ctrl.go_forward(electronics, panel)
         electronics.accelerate.assert_called_once()
 
 
