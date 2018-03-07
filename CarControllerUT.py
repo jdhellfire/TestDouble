@@ -44,34 +44,9 @@ class ControllerUT(unittest.TestCase):
         """
         GIVEN :electronics, status_panel
         WHEN  :call stop
-        WHEN  :StatusPanel.get_speed() < 0
+        WHEN  :StatusPanel.get_speed() <= 0
         THEN  :stop will be call only once
         """
-
-        half_braking_power = 50
-        self.panel.get_speed = mock.Mock(return_value=-1)
-        self.electronics.push_brakes = mock.Mock(return_value=None)
-
-        self.ctrl.stop(half_braking_power, self.electronics, self.panel)
-        self.assertEqual(1, self.panel.get_speed.call_count)
-
-
-    def test_interface_stop_002(self):
-        """
-        GIVEN :electronics, status_panel
-        WHEN  :call stop
-        WHEN  :StatusPanel.get_speed() = 0
-        THEN  :stop will be call only once
-        """
-
-        half_braking_power = 50
-        self.panel.get_speed = mock.Mock(return_value=0)
-        self.electronics.push_brakes = mock.Mock(return_value=None)
-
-        self.ctrl.stop(half_braking_power, self.electronics, self.panel)
-        self.assertEqual(1, self.panel.get_speed.call_count)
-
-    def test_interface_stop_003(self):
         """
         GIVEN :electronics, status_panel
         WHEN  :call stop
@@ -80,12 +55,45 @@ class ControllerUT(unittest.TestCase):
         """
 
         half_braking_power = 50
-        self.panel.get_speed = mock.Mock(side_effect=[1, 0])
-        self.electronics.push_brakes = mock.Mock(return_value=None)
+        for data in TestData['STOP']:
 
-        self.ctrl.stop(half_braking_power, self.electronics, self.panel)
-        self.assertEqual(2, self.panel.get_speed.call_count)
+            self.panel.get_speed = mock.Mock(side_effect=data['SPEED'])
+            self.electronics.push_brakes = mock.Mock(return_value=None)
 
+            self.ctrl.stop(half_braking_power, self.electronics, self.panel)
+            self.assertEqual(data['CALLED_CNT'], self.panel.get_speed.call_count)
+
+
+    # def test_interface_stop_002(self):
+    #     """
+    #     GIVEN :electronics, status_panel
+    #     WHEN  :call stop
+    #     WHEN  :StatusPanel.get_speed() = 0
+    #     THEN  :stop will be call only once
+    #     """
+    #
+    #     half_braking_power = 50
+    #     self.panel.get_speed = mock.Mock(return_value=0)
+    #     self.electronics.push_brakes = mock.Mock(return_value=None)
+    #
+    #     self.ctrl.stop(half_braking_power, self.electronics, self.panel)
+    #     self.assertEqual(1, self.panel.get_speed.call_count)
+    #
+    # def test_interface_stop_003(self):
+    #     """
+    #     GIVEN :electronics, status_panel
+    #     WHEN  :call stop
+    #     WHEN  :StatusPanel.get_speed() > 0
+    #     THEN  :stop will be call 2 ate least
+    #     """
+    #
+    #     half_braking_power = 50
+    #     self.panel.get_speed = mock.Mock(side_effect=[1, 0])
+    #     self.electronics.push_brakes = mock.Mock(return_value=None)
+    #
+    #     self.ctrl.stop(half_braking_power, self.electronics, self.panel)
+    #     self.assertEqual(2, self.panel.get_speed.call_count)
+    #
 
 if __name__ == '__main__':
     unittest.main()
