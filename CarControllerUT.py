@@ -1,5 +1,6 @@
 import unittest
 from unittest import mock
+from mock import create_autospec
 from TestData import *
 from CarController import CarController
 from Engine import Engine
@@ -39,9 +40,23 @@ class ControllerUT(unittest.TestCase):
         self.ctrl.go_forward(self.electronics, self.panel)
         self.assertEqual(Data['CALLED_CNT'], self.electronics.accelerate.call_count)
 
-    def test_interface_stop(self):
-        pass
 
+    def test_interface_stop_001(self):
+        """
+        GIVEN :electronics, status_panel
+        WHEN  :call stop
+        WHEN  :StatusPanel.get_speed() < 0
+        THEN  :stop will be call only once
+        """
+
+        half_braking_power = 50
+        self.electronics.get_speed = mock.Mock(return_value=-1)
+
+        self.ctrl.stop = create_autospec(self.ctrl.stop, return_value=None)
+
+        self.ctrl.stop(half_braking_power, self.electronics, self.panel)
+
+        self.assertEqual(1, self.ctrl.stop.call_count)
 
 
 if __name__ == '__main__':
